@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>Data Science Work-Flow</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+        <h1 id="data-science-work-flow">Data Science Work-Flow</h1>
+<h2 id="20190108-ivan-gadjev">2019.01.08 Ivan Gadjev</h2>
+<hr>
+<p>My workflow with VSCode, anaconda, jupyter, and cookiecutter:</p>
+<ol>
+<li>Open Anaconda
+<ul>
+<li>NB: If PC was asleep or restarted a running Anaconda may be unresponsive to &quot;launch&quot; commands. I think this is an issue for my system only. :/</li>
+</ul>
+</li>
+<li>Choose the virtual environment to activate (data_sci_base, ivan-main, etc.)
+<ul>
+<li>The cookiecutter package should be installed, if you want to handle project mangement and file structure with cookiecutter data science.</li>
+</ul>
+</li>
+<li>Launch VS Code
+<ul>
+<li>This will start a new window of VSC with the  activated venv. The venv can be changed inside VSC by <code>Ctrl+Shift+P &gt; python select interpreter &gt; select venv</code></li>
+</ul>
+</li>
+<li>Launch jupyter notebook from inside VSC. Open a terminal and enter <code>jupyter notebook</code>. This takes care of the server and kernel connection problems that PyCharm was having with jupyter.</li>
+</ol>
+<hr>
+<h2 id="cookiecutter">cookiecutter</h2>
+<p>Cookiecutter is a python module that handles project structure.</p>
+<p>Please read these:
+-<a href="https://drivendata.github.io/cookiecutter-data-science/#why-use-this-project-structure">Cookiecutter Data Science</a>
+-<a href="https://medium.com/@rrfd/cookiecutter-data-science-organize-your-projects-atom-and-jupyter-2be7862f487e">Cookiecutter Data Science - atom and jupyter</a></p>
+<p>Installing <code>cookiecutter</code> for a venv using anaconda.</p>
+<ol>
+<li>In anaconda navigator, add the channel <code>conda-forge</code>
+-Channels &gt; Add &gt; type &quot;conda-forge&quot; &gt; Update Channels
+-I think this is needed for extra packages like <code>cookiecutter</code> to be available.</li>
+<li><code>cookiecutter</code> will now be available for the venv in the navigator or by using pip install</li>
+</ol>
+<p>Using <code>cookiecutter</code></p>
+<ol>
+<li>At a terminal with the venv activated and at the project path enter:<pre><code><div>D:\my\science\projects&gt;cookiecutter 'url-to-git-of-project-structure'
+</div></code></pre>
+<ul>
+<li>The Data Science project structure is located here:</li>
+</ul>
+<pre><code><div>D:\my\science\projects&gt;cookiecutter https://github.com/drivendata/cookiecutter-data-science
+</div></code></pre>
+</li>
+<li>Enter the required fields. If a field is left blank the default value is filled in.</li>
+</ol>
+<p>src folder</p>
+<p>The <code>.\src</code> folder as a module. This folder has a <code>__init__.py</code> file that allows it to contain custom function and class definitions that can be imported by projects that use the file structure. To add the <code>.\src</code> forlder as a module, the directory must be added to the path of the venv interpreter. This can be handled by <code>pip install --editable path\to\project\src</code> run at a terminal with venv. For example:</p>
+<pre><code class="language-bash"><div>(data_sci_base) D:\Dropbox\py_projects&gt;pip install --editable D:\Dropbox\py_projects\kaggle_LAX\lax_inout
+Obtaining file:///D:/Dropbox/py_projects/kaggle_LAX/lax_inout
+Installing collected packages: src
+  Found existing installation: src 0.1.0
+    Uninstalling src-0.1.0:
+      Successfully uninstalled src-0.1.0
+  Running setup.py develop <span class="hljs-keyword">for</span> src
+Successfully installed src
+
+(data_sci_base) D:\Dropbox\py_projects&gt;
+</div></code></pre>
+<p>Once this is done, custom functions can be written in the file structure:</p>
+<pre><code><div>.\src\
+    + customFuncs
+        - foo.py
+        - otherClasses.py
+    - __init__.py
+</div></code></pre>
+<p>Inside <code>foo.py</code>, define methods as functions:</p>
+<pre><code class="language-python"><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fooFunc1</span><span class="hljs-params">(arg1)</span>:</span>
+    <span class="hljs-keyword">return</span> arg1 + <span class="hljs-number">1</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">nextFunc</span><span class="hljs-params">(...)</span>:</span>
+    ...
+    <span class="hljs-keyword">return</span> ...
+</div></code></pre>
+<p>import custom classes as follows:</p>
+<pre><code class="language-python"><div><span class="hljs-keyword">from</span> src.customFuncs <span class="hljs-keyword">import</span> foo.py
+
+print(foo.fooFunc1(<span class="hljs-number">9</span>))
+</div></code></pre>
+
+    </body>
+    </html>
